@@ -1,16 +1,13 @@
 import mongoose from "mongoose";
 const mongoURI = process.env.MONGO_URI;
-
+import logger from "../logger.js";
 export const connectToMongo = () => {
-    mongoose.connect(mongoURI, {
-      useNewUrlParser: true, 
-      useUnifiedTopology: true, 
-    })
+        mongoose.connect(mongoURI, {})
     .then(() => {
-      console.log('MongoDB connected successfully!');
+      logger.info('MongoDB connected successfully!');
     })
     .catch((err) => {
-      console.error('MongoDB connection error:', err);
+      logger.error('MongoDB connection error:', err);
       process.exit(1); // Exit process with failure
     });
 }
