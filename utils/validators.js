@@ -141,7 +141,7 @@ const validateVerifySignupOTP = (req, res, next) => {
   next();
 };
 
-module.exports = {
+export {
   validateMobile,
   validateOTP,
   validateName,

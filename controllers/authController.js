@@ -1,6 +1,6 @@
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
-const otpService = require('../services/otpService');
+import User from '../models/User.js';
+import jwt from 'jsonwebtoken';
+import * as otpService from '../services/otpService.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
@@ -183,7 +183,7 @@ const verifySignupOTP = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   sendLoginOTP,
   verifyLoginOTP,
   sendSignupOTP,

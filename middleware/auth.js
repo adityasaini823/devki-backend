@@ -1,5 +1,5 @@
 // Authentication middleware for protecting routes
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 const authenticateToken = (req, res, next) => {
@@ -26,5 +26,5 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-module.exports = { authenticateToken };
+export { authenticateToken };
 

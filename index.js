@@ -1,10 +1,13 @@
-require('dotenv').config();
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const authRoutes = require("./routes/authRoutes");
-const errorHandler = require("./middleware/errorHandler");
+import 'dotenv/config';
+import express from "express";
+import cors from "cors";
+import authRoutes from "./routes/authRoutes.js";
+import errorHandler from "./middleware/errorHandler.js";
+import { connectToMongo } from "./config/db.js";
 
+const app = express();
+// Connect to MongoDB
+connectToMongo();
 // Middlewares
 app.use(cors());
 

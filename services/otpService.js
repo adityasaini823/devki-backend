@@ -1,4 +1,4 @@
-const twilio = require('twilio');
+import twilio from 'twilio';
 const accountSid = process.env.TWILIO_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const otpStore = new Map(); // mobile -> { otp, expiresAt }
@@ -77,7 +77,7 @@ const generateAndSendOTP = async (mobile) => {
   }
 };
 
-module.exports = {
+export {
   generateAndSendOTP,
   verifyOTP,
 };
