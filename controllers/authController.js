@@ -8,20 +8,11 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 const sendLoginOTP = async (req, res) => {
   try {
     const { mobile } = req.body;
-    let user = User.findByMobile(mobile);
     
-    if (!user) {
-      try {
-        user = User.create("User", mobile);
-      } catch (error) {
-        user = User.findByMobile(mobile);
-        if (!user) {
-          throw error;
-        }
-      }
-    }
-
-    // Generate and send OTP
+    // Check if user exists (but don't create yet)
+    const user = await User.findOne({ mobile: mobile });
+    
+    // Generate and send OTP (works for both existing and new users)
     const result = await otpService.generateAndSendOTP(mobile);
 
     if (result.success) {
@@ -29,6 +20,7 @@ const sendLoginOTP = async (req, res) => {
         success: true,
         message: 'OTP sent successfully',
         otpSent: true,
+        userExists: !!user, // Indicate if user already exists
         // In development, include OTP in response for testing
         ...(process.env.NODE_ENV === 'development' && { otp: result.otp }),
       });
@@ -51,38 +43,69 @@ const sendLoginOTP = async (req, res) => {
 const verifyLoginOTP = async (req, res) => {
   try {
     const { mobile, otp } = req.body;
-
-    // Verify OTP
-    const otpResult = otpService.verifyOTP(mobile, otp);
     
-    if (!otpResult.valid) {
+    // Verify OTP (this will throw error if invalid, or return null if user doesn't exist)
+    let user;
+    try {
+      user = await otpService.verifyOTP(mobile, otp);
+    } catch (error) {
       return res.status(400).json({
         success: false,
-        message: otpResult.message,
+        message: error.message || 'Invalid or expired OTP',
       });
     }
 
-    // Find user
-    const user = User.findByMobile(mobile);
+    // If user is null, it means OTP is verified but user doesn't exist yet
     if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: 'User not found',
+      return res.status(200).json({
+        success: true,
+        message: 'OTP verified. Please complete your profile.',
+        needsProfile: true,
+        mobile: mobile,
       });
     }
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user.id, mobile: user.mobile },
-      JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+    // Check if user profile is complete
+    const isProfileComplete = user.first_name && 
+      user.first_name !== 'guest' &&
+      user.address && 
+      user.city && 
+      user.state && 
+      user.pincode;
 
+    // If user exists and profile is complete, return token
+    if (isProfileComplete) {
+      const token = jwt.sign(
+        { userId: user._id, mobile: user.mobile },
+        JWT_SECRET,
+        { expiresIn: '7d' }
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: 'Login successful',
+        token,
+        user: {
+          id: user._id,
+          mobile: user.mobile,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: user.email,
+          address: user.address,
+          city: user.city,
+          state: user.state,
+          pincode: user.pincode,
+        },
+        needsProfile: false,
+      });
+    }
+
+    // If profile is incomplete, indicate profile is needed
     return res.status(200).json({
       success: true,
-      message: 'Login successful',
-      token,
-      user: user.toJSON(),
+      message: 'OTP verified. Please complete your profile.',
+      needsProfile: true,
+      mobile: mobile,
     });
   } catch (error) {
     console.error('Verify login OTP error:', error);
@@ -99,7 +122,7 @@ const sendSignupOTP = async (req, res) => {
     const { mobile } = req.body;
 
     // Check if user already exists
-    const existingUser = User.findByMobile(mobile);
+    const existingUser = await User.findOne({ mobile: mobile });
     if (existingUser) {
       return res.status(409).json({
         success: false,
@@ -136,46 +159,125 @@ const sendSignupOTP = async (req, res) => {
 // Verify OTP and signup
 const verifySignupOTP = async (req, res) => {
   try {
-    const { name, mobile, otp } = req.body;
+    const { mobile, otp } = req.body;
 
-    // Verify OTP
-    const otpResult = otpService.verifyOTP(mobile, otp);
-    
-    if (!otpResult.valid) {
+    // Verify OTP (this will throw error if invalid)
+    try {
+      await otpService.verifyOTP(mobile, otp);
+    } catch (error) {
       return res.status(400).json({
         success: false,
-        message: otpResult.message,
+        message: error.message || 'Invalid or expired OTP',
       });
     }
 
-    // Create user
-    try {
-      const user = User.create(name, mobile);
-
-      // Generate JWT token
-      const token = jwt.sign(
-        { userId: user.id, mobile: user.mobile },
-        JWT_SECRET,
-        { expiresIn: '7d' }
-      );
-
-      return res.status(201).json({
-        success: true,
-        message: 'User created successfully',
-        token,
-        user: user.toJSON(),
+    // Check if user already exists
+    const existingUser = await User.findOne({ mobile: mobile });
+    if (existingUser) {
+      return res.status(409).json({
+        success: false,
+        message: 'User with this mobile number already exists',
       });
-    } catch (error) {
-      if (error.message === 'User already exists') {
-        return res.status(409).json({
-          success: false,
-          message: 'User with this mobile number already exists',
-        });
-      }
-      throw error;
     }
+
+    // OTP verified, but user creation will happen in complete-profile endpoint
+    return res.status(200).json({
+      success: true,
+      message: 'OTP verified. Please complete your profile.',
+      needsProfile: true,
+      mobile: mobile,
+    });
   } catch (error) {
     console.error('Verify signup OTP error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
+// Complete profile for new users or update incomplete profiles
+const completeProfile = async (req, res) => {
+  try {
+    const { 
+      mobile, 
+      first_name, 
+      last_name, 
+      email, 
+      address, 
+      city, 
+      state, 
+      pincode 
+    } = req.body;
+
+    // Validate required fields
+    if (!first_name || !address || !city || !state || !pincode) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields: first_name, address, city, state, pincode',
+      });
+    }
+
+    // Check if user exists
+    let user = await User.findOne({ mobile: mobile });
+
+    if (user) {
+      // Update existing user profile
+      user.first_name = first_name;
+      user.last_name = last_name || '';
+      user.email = email || '';
+      user.address = address;
+      user.city = city;
+      user.state = state;
+      user.pincode = pincode;
+      user.updatedAt = Date.now();
+      await user.save();
+    } else {
+      // Create new user
+      user = await User.create({
+        first_name,
+        last_name: last_name || '',
+        mobile,
+        email: email || '',
+        address,
+        city,
+        state,
+        pincode,
+        country: 'India',
+      });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id, mobile: user.mobile },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: 'Profile completed successfully',
+      token,
+      user: {
+        id: user._id,
+        mobile: user.mobile,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        address: user.address,
+        city: user.city,
+        state: user.state,
+        pincode: user.pincode,
+      },
+    });
+  } catch (error) {
+    console.error('Complete profile error:', error);
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: 'User with this mobile number already exists',
+      });
+    }
     return res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -188,4 +290,5 @@ export {
   verifyLoginOTP,
   sendSignupOTP,
   verifySignupOTP,
+  completeProfile,
 };

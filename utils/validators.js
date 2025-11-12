@@ -114,14 +114,7 @@ const validateVerifySignupOTP = (req, res, next) => {
     });
   }
 
-  const { name, mobile, otp } = req.body;
-
-  if (!name || !validateName(name)) {
-    return res.status(400).json({
-      success: false,
-      message: 'Name must be at least 2 characters long',
-    });
-  }
+  const { mobile, otp } = req.body;
 
   if (!mobile || !validateMobile(mobile)) {
     return res.status(400).json({
@@ -141,6 +134,62 @@ const validateVerifySignupOTP = (req, res, next) => {
   next();
 };
 
+const validateCompleteProfile = (req, res, next) => {
+  if (!req.body || typeof req.body !== 'object') {
+    return res.status(400).json({
+      success: false,
+      message: 'Request body is missing or invalid. Please ensure Content-Type is application/json and body is sent.',
+    });
+  }
+
+  const { mobile, first_name, address, city, state, pincode } = req.body;
+
+  if (!mobile || !validateMobile(mobile)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please provide a valid mobile number',
+    });
+  }
+
+  if (!first_name || !validateName(first_name)) {
+    return res.status(400).json({
+      success: false,
+      message: 'First name must be at least 2 characters long',
+    });
+  }
+
+  if (!address || address.trim().length < 5) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please provide a valid address (at least 5 characters)',
+    });
+  }
+
+  if (!city || city.trim().length < 2) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please provide a valid city name',
+    });
+  }
+
+  if (!state || state.trim().length < 2) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please provide a valid state name',
+    });
+  }
+
+  if (!pincode || !/^\d{6}$/.test(pincode)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please provide a valid 6-digit pincode',
+    });
+  }
+
+  req.body.mobile = formatMobile(mobile);
+  next();
+};
+
 export {
   validateMobile,
   validateOTP,
@@ -150,5 +199,6 @@ export {
   validateVerifyLoginOTP,
   validateSendSignupOTP,
   validateVerifySignupOTP,
+  validateCompleteProfile,
 };
 

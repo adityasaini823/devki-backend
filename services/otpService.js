@@ -3,50 +3,72 @@ const accountSid = process.env.TWILIO_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const otpStore = new Map(); // mobile -> { otp, expiresAt }
 const client = twilio(accountSid, authToken);
-
+import User from '../models/User.js';
 // Generate random 6-digit OTP
 const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-// Store OTP with expiration (5 minutes)
-const storeOTP = (mobile, otp) => {
-  const expiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
-  otpStore.set(mobile, { otp, expiresAt });
-  console.log(otpStore);
-  // Cleanup expired OTPs
-  setTimeout(() => {
-    otpStore.delete(mobile);
-  }, 5 * 60 * 1000);
+const storeOTP = async(mobile, otp) => {
+  const fiveMinutesFromNow = new Date(Date.now() + 5 * 60 * 1000);
+  const expiresAtTimestamp = Date.now() + 5 * 60 * 1000; // For in-memory store
+  
+  // Try to update existing user
+  let user = await User.findOneAndUpdate(
+    { mobile: mobile }, 
+    { $set: { otp: otp, otp_expiresAt: fiveMinutesFromNow } }, 
+    { new: true }
+  );
+  
+  // If user doesn't exist, store OTP in memory temporarily
+  if (!user) {
+    otpStore.set(mobile, { otp, expiresAt: expiresAtTimestamp });
+    return null; // User doesn't exist yet
+  }
+  
+  return user;
 };
 
-// Verify OTP
-const verifyOTP = (mobile, otp) => {
-  const stored = otpStore.get(mobile);
+const verifyOTP = async (mobile, otp) => {
+  // First check if user exists in database
+  let user = await User.findOne({ mobile: mobile });
   
-  if (!stored) {
-    return { valid: false, message: 'OTP not found or expired' };
+  if (user) {
+    // User exists, verify OTP from database
+    if (user.otp !== otp) {
+      throw new Error('Invalid OTP');
+    }
+    // Convert Date to timestamp for comparison
+    const expiresAt = user.otp_expiresAt instanceof Date 
+      ? user.otp_expiresAt.getTime() 
+      : user.otp_expiresAt;
+    if (Date.now() > expiresAt) {
+      throw new Error('OTP has expired');
+    }
+    return user;
+  } else {
+    // User doesn't exist, check in-memory store
+    const storedOTP = otpStore.get(mobile);
+    if (!storedOTP) {
+      throw new Error('User not found');
+    }
+    if (storedOTP.otp !== otp) {
+      throw new Error('Invalid OTP');
+    }
+    if (Date.now() > storedOTP.expiresAt) {
+      otpStore.delete(mobile); // Clean up expired OTP
+      throw new Error('OTP has expired');
+    }
+    // OTP verified, but user doesn't exist yet - return null
+    // The controller will handle creating the user
+    return null;
   }
-  
-  if (Date.now() > stored.expiresAt) {
-    otpStore.delete(mobile);
-    return { valid: false, message: 'OTP has expired' };
-  }
-  
-  if (stored.otp !== otp) {
-    return { valid: false, message: 'Invalid OTP' };
-  }
-  
-  // OTP verified successfully - remove it (one-time use)
-  otpStore.delete(mobile);
-  return { valid: true, message: 'OTP verified successfully' };
 };
 
-// Send OTP (in production, integrate with SMS service like Twilio, AWS SNS, etc.)
 const sendOTP = async (mobile, otp) => {
 
   const message = await client.messages.create({
-    body: `Your Devki Verification code - ${otp}`,
+    body: `Your Devki Verification code - ${otp} is valid for 5 minutes`,
     from: "+1906 422 6190",
     to: mobile,
   });
@@ -57,16 +79,15 @@ const sendOTP = async (mobile, otp) => {
   return { success: true, message: 'OTP sent successfully' };
 };
 
-// Main function: Generate and send OTP
 const generateAndSendOTP = async (mobile) => {
   try {
     const otp = generateOTP();
-    storeOTP(mobile, otp);
+    await storeOTP(mobile, otp);
     await sendOTP(mobile, otp);
     return {
       success: true,
       message: 'OTP sent successfully',
-      ...(process.env.NODE_ENV === 'development' && { otp }),
+      otp: process.env.NODE_ENV === 'development' ? otp : undefined, // Include OTP in dev mode
     };
   } catch (error) {
     console.error('Error sending OTP:', error);
