@@ -1,6 +1,7 @@
-// Error handling middleware
+import logger from '../logger.js';
+
 const errorHandler = (err, req, res, next) => {
-  console.error('Error:', err);
+  logger.error('Error:', err);
 
   // Default error
   const statusCode = err.statusCode || 500;

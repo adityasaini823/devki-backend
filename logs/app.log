@@ -101,3 +101,221 @@
 {"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-13 00:02:37"}
 {"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-13 00:02:44"}
 {"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-13 00:02:45"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-13 00:16:44"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-13 00:16:46"}
+{"level":"info","message":"POST /api/auth/send-login-otp","timestamp":"2025-11-13 09:17:59"}
+{"accept":"*/*","accept-encoding":"gzip, deflate, br","connection":"keep-alive","content-length":"17","content-type":"application/x-www-form-urlencoded","host":"localhost:3001","level":"info","message":"Headers:","postman-token":"0f2720fb-b9f6-4dce-b665-f6d77acf6395","timestamp":"2025-11-13 09:17:59","user-agent":"PostmanRuntime/7.50.0"}
+{"level":"info","message":"POST /api/auth/verify-login-otp","timestamp":"2025-11-13 09:18:34"}
+{"accept":"*/*","accept-encoding":"gzip, deflate, br","connection":"keep-alive","content-length":"28","content-type":"application/x-www-form-urlencoded","host":"localhost:3001","level":"info","message":"Headers:","postman-token":"9dbe5a4c-e044-4500-9eb1-733a374056a0","timestamp":"2025-11-13 09:18:34","user-agent":"PostmanRuntime/7.50.0"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-13 09:56:16"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-13 09:56:16"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-13 09:56:16"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-13 09:56:16"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-13 09:56:16"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-13 09:56:18"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-13 09:56:37"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-13 09:56:37"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-13 09:56:37"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-13 09:56:37"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-13 09:56:37"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-13 09:56:39"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-13 09:56:54"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-13 09:56:54"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-13 09:56:54"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-13 09:56:54"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-13 09:56:54"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-13 09:56:55"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-13 09:57:21"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-13 09:57:21"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-13 09:57:21"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-13 09:57:21"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-13 09:57:21"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-13 09:57:23"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-13 09:57:39"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-13 09:57:39"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-13 09:57:39"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-13 09:57:39"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-13 09:57:39"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-13 09:57:40"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-13 09:57:52"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-13 09:57:52"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-13 09:57:52"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-13 09:57:52"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-13 09:57:52"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-13 09:57:53"}
+{"level":"info","message":"POST /api/auth/send-login-otp","timestamp":"2025-11-13 09:58:23"}
+{"accept":"*/*","accept-encoding":"gzip, deflate","accept-language":"en-IN,en;q=0.9","connection":"keep-alive","content-length":"26","content-type":"application/json","host":"192.168.1.43:3001","level":"info","message":"Headers:","timestamp":"2025-11-13 09:58:23","user-agent":"Expo/1017756 CFNetwork/3860.100.1 Darwin/25.0.0"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-13 10:00:10"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-13 10:00:10"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-13 10:00:10"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-13 10:00:10"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-13 10:00:10"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-13 10:00:14"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-13 10:00:14"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-13 10:00:14"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-13 10:00:14"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-13 10:00:14"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-13 10:00:14"}
+{"level":"info","message":"POST /api/auth/send-login-otp","timestamp":"2025-11-13 10:00:16"}
+{"accept":"*/*","accept-encoding":"gzip, deflate","accept-language":"en-IN,en;q=0.9","connection":"keep-alive","content-length":"26","content-type":"application/json","host":"192.168.1.43:3001","level":"info","message":"Headers:","timestamp":"2025-11-13 10:00:16","user-agent":"Expo/1017756 CFNetwork/3860.100.1 Darwin/25.0.0"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-13 10:00:38"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-13 10:00:38"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-13 10:00:38"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-13 10:00:38"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-13 10:00:38"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-13 10:00:38"}
+{"level":"info","message":"POST /api/auth/send-login-otp","timestamp":"2025-11-13 10:12:11"}
+{"accept":"*/*","accept-encoding":"gzip, deflate","accept-language":"en-IN,en;q=0.9","connection":"keep-alive","content-length":"26","content-type":"application/json","host":"192.168.1.43:3001","level":"info","message":"Headers:","timestamp":"2025-11-13 10:12:11","user-agent":"Expo/1017756 CFNetwork/3860.100.1 Darwin/25.0.0"}
+{"level":"info","message":"POST /api/auth/verify-login-otp","timestamp":"2025-11-13 10:12:19"}
+{"accept":"*/*","accept-encoding":"gzip, deflate","accept-language":"en-IN,en;q=0.9","connection":"keep-alive","content-length":"39","content-type":"application/json","host":"192.168.1.43:3001","level":"info","message":"Headers:","timestamp":"2025-11-13 10:12:19","user-agent":"Expo/1017756 CFNetwork/3860.100.1 Darwin/25.0.0"}
+{"level":"info","message":"POST /api/auth/complete-profile","timestamp":"2025-11-13 10:13:13"}
+{"accept":"*/*","accept-encoding":"gzip, deflate","accept-language":"en-IN,en;q=0.9","connection":"keep-alive","content-length":"140","content-type":"application/json","host":"192.168.1.43:3001","level":"info","message":"Headers:","timestamp":"2025-11-13 10:13:13","user-agent":"Expo/1017756 CFNetwork/3860.100.1 Darwin/25.0.0"}
+{"level":"info","message":"POST /api/auth/send-login-otp","timestamp":"2025-11-13 10:17:37"}
+{"accept":"*/*","accept-encoding":"gzip, deflate","accept-language":"en-IN,en;q=0.9","connection":"keep-alive","content-length":"26","content-type":"application/json","host":"192.168.1.43:3001","level":"info","message":"Headers:","timestamp":"2025-11-13 10:17:37","user-agent":"Expo/1017756 CFNetwork/3860.100.1 Darwin/25.0.0"}
+{"level":"info","message":"POST /api/auth/verify-login-otp","timestamp":"2025-11-13 10:17:49"}
+{"accept":"*/*","accept-encoding":"gzip, deflate","accept-language":"en-IN,en;q=0.9","connection":"keep-alive","content-length":"39","content-type":"application/json","host":"192.168.1.43:3001","level":"info","message":"Headers:","timestamp":"2025-11-13 10:17:49","user-agent":"Expo/1017756 CFNetwork/3860.100.1 Darwin/25.0.0"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:08:32"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:08:32"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:08:32"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:08:32"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:08:32"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:08:37"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:08:37"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:08:37"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:08:37"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:08:37"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:08:38"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:08:41"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:08:41"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:08:41"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:08:41"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:08:41"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:08:42"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:08:45"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:08:45"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:08:45"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:08:45"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:08:45"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:08:46"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:08:49"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:08:49"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:08:49"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:08:49"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:08:49"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:08:50"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:08:54"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:08:54"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:08:54"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:08:54"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:08:54"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:08:55"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:09:02"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:09:02"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:09:02"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:09:02"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:09:02"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:09:16"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:09:16"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:09:16"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:09:16"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:09:16"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:09:23"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:09:23"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:09:23"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:09:23"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:09:23"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:09:30"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:09:30"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:09:30"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:09:30"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:09:30"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:10:02"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:10:02"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:10:02"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:10:02"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:10:02"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:10:11"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:10:11"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:10:11"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:10:11"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:10:11"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:10:22"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:10:51"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:10:51"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:10:51"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:10:51"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:10:51"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:11:11"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:11:11"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:11:11"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:11:11"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:11:11"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:11:13"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:11:39"}
+{"level":"info","message":"Server accessible at:","timestamp":"2025-11-18 10:11:39"}
+{"level":"info","message":"  - http://localhost:3001","timestamp":"2025-11-18 10:11:39"}
+{"level":"info","message":"  - http://127.0.0.1:3001","timestamp":"2025-11-18 10:11:39"}
+{"level":"info","message":"  - http://[YOUR_LOCAL_IP]:3001 (for devices on same network)","timestamp":"2025-11-18 10:11:39"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:12:00"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:12:22"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:12:22"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:12:23"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:12:27"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:12:27"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:12:34"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:12:34"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:12:39"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:12:39"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:12:40"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:12:44"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:12:44"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:12:45"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:12:51"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:12:51"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:12:57"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:12:57"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:13:06"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:13:06"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:13:13"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:13:13"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:13:14"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:13:20"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:13:20"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:13:21"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:13:25"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:13:25"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:13:27"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:13:31"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:13:31"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:13:37"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:13:37"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:13:47"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:13:47"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:13:53"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:13:53"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:14:02"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:14:21"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:14:21"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:14:23"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:14:40"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:14:40"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:14:42"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:14:49"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:14:49"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:14:51"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:15:12"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:15:12"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:15:19"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:15:19"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:15:29"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:15:29"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:15:31"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:15:37"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:15:37"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:15:39"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:15:50"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:15:50"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:15:51"}
+{"level":"info","message":"Server is running on port 3001","timestamp":"2025-11-18 10:16:08"}
+{"level":"info","message":"Server accessible at http://localhost:3001","timestamp":"2025-11-18 10:16:08"}
+{"level":"info","message":"MongoDB connected successfully!","timestamp":"2025-11-18 10:16:13"}

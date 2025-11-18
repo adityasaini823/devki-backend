@@ -7,8 +7,8 @@ const validateMobile = (mobile) => {
 };
 
 const validateOTP = (otp) => {
-  // OTP should be exactly 6 digits
-  const otpRegex = /^\d{6}$/;
+  // OTP should be exactly 4 digits
+  const otpRegex = /^\d{4}$/;
   return otpRegex.test(otp);
 };
 
@@ -32,9 +32,6 @@ const formatMobile = (mobile) => {
 };
 
 const validateSendLoginOTP = (req, res, next) => {
-  console.log('Request body:', req.body);
-  console.log('Content-Type:', req.get('Content-Type'));
-  
   // Check if req.body exists
   if (!req.body || typeof req.body !== 'object') {
     return res.status(400).json({
@@ -77,7 +74,7 @@ const validateVerifyLoginOTP = (req, res, next) => {
   if (!otp || !validateOTP(otp)) {
     return res.status(400).json({
       success: false,
-      message: 'Please provide a valid 6-digit OTP',
+      message: 'Please provide a valid 4-digit OTP',
     });
   }
 
@@ -126,7 +123,7 @@ const validateVerifySignupOTP = (req, res, next) => {
   if (!otp || !validateOTP(otp)) {
     return res.status(400).json({
       success: false,
-      message: 'Please provide a valid 6-digit OTP',
+      message: 'Please provide a valid 4-digit OTP',
     });
   }
 
