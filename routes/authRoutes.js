@@ -5,6 +5,8 @@ import {
   sendSignupOTP,
   verifySignupOTP,
   completeProfile,
+  refreshToken,
+  logout,
 } from '../controllers/authController.js';
 import {
   validateSendLoginOTP,
@@ -13,6 +15,7 @@ import {
   validateVerifySignupOTP,
   validateCompleteProfile,
 } from '../utils/validators.js';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -26,6 +29,10 @@ router.post('/verify-signup-otp', validateVerifySignupOTP, verifySignupOTP);
 
 // Complete profile (for new users or incomplete profiles)
 router.post('/complete-profile', validateCompleteProfile, completeProfile);
+
+// Token management
+router.post('/refresh-token', refreshToken);
+router.post('/logout', authenticateToken, logout);
 
 export default router;
 

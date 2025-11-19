@@ -68,13 +68,10 @@ const userSchema = new mongoose.Schema({
       default: Date.now,
     },
 });
-userSchema.index(
-  { "otp_expiresAt": 1 }, 
-  { expireAfterSeconds: 0, name: "otp_ttl_index" } 
-);
-userSchema.index(
-  { "refreshToken_createdAt": 1 }, 
-  { expireAfterSeconds: 0, name: "refreshToken_ttl_index" } 
-);
+
+// Regular indexes (NOT TTL - TTL indexes delete entire documents!)
+userSchema.index({ "otp_expiresAt": 1 });
+userSchema.index({ "refreshToken_createdAt": 1 });
+
 export default mongoose.model('User', userSchema);
 

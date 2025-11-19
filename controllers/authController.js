@@ -1,9 +1,29 @@
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import * as otpService from '../services/otpService.js';
 import logger from '../logger.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || JWT_SECRET + '-refresh';
+
+// Helper function to generate refresh token
+const generateRefreshToken = () => {
+  return crypto.randomBytes(64).toString('hex');
+};
+
+// Helper function to generate access and refresh tokens
+const generateTokens = (userId, mobile) => {
+  const accessToken = jwt.sign(
+    { userId, mobile },
+    JWT_SECRET,
+    { expiresIn: '15m' } // Short-lived access token
+  );
+  
+  const refreshToken = generateRefreshToken();
+  
+  return { accessToken, refreshToken };
+};
 
 const sendLoginOTP = async (req, res) => {
   try {
@@ -59,6 +79,11 @@ const verifyLoginOTP = async (req, res) => {
       });
     }
 
+    // Clear OTP fields after successful verification
+    user.otp = undefined;
+    user.otp_expiresAt = undefined;
+    await user.save();
+
     const isProfileComplete = user.first_name && 
       user.first_name !== 'guest' &&
       user.address && 
@@ -67,16 +92,18 @@ const verifyLoginOTP = async (req, res) => {
       user.pincode;
 
     if (isProfileComplete) {
-      const token = jwt.sign(
-        { userId: user._id, mobile: user.mobile },
-        JWT_SECRET,
-        { expiresIn: '7d' }
-      );
+      const { accessToken, refreshToken } = generateTokens(user._id, user.mobile);
+
+      // Store refresh token in database (OTP already cleared after verification)
+      user.refresh_token = refreshToken;
+      user.refreshToken_createdAt = new Date();
+      await user.save();
 
       return res.status(200).json({
         success: true,
         message: 'Login successful',
-        token,
+        token: accessToken,
+        refreshToken,
         user: {
           id: user._id,
           mobile: user.mobile,
@@ -226,16 +253,20 @@ const completeProfile = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      { userId: user._id, mobile: user.mobile },
-      JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+    const { accessToken, refreshToken } = generateTokens(user._id, user.mobile);
+
+    // Clear OTP fields and store refresh token
+    user.otp = undefined;
+    user.otp_expiresAt = undefined;
+    user.refresh_token = refreshToken;
+    user.refreshToken_createdAt = new Date();
+    await user.save();
 
     return res.status(200).json({
       success: true,
       message: 'Profile completed successfully',
-      token,
+      token: accessToken,
+      refreshToken,
       user: {
         id: user._id,
         mobile: user.mobile,
@@ -263,10 +294,99 @@ const completeProfile = async (req, res) => {
   }
 };
 
+const refreshToken = async (req, res) => {
+  try {
+    const { refreshToken: token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: 'Refresh token is required',
+      });
+    }
+
+    // Find user with this refresh token
+    const user = await User.findOne({ refresh_token: token });
+
+    if (!user) {
+      return res.status(403).json({
+        success: false,
+        message: 'Invalid refresh token',
+      });
+    }
+
+    // Check if refresh token is expired (30 days)
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    if (!user.refreshToken_createdAt || user.refreshToken_createdAt < thirtyDaysAgo) {
+      // Clear expired refresh token
+      user.refresh_token = undefined;
+      user.refreshToken_createdAt = undefined;
+      await user.save();
+
+      return res.status(403).json({
+        success: false,
+        message: 'Refresh token has expired',
+      });
+    }
+
+    // Generate new access token
+    const { accessToken } = generateTokens(user._id, user.mobile);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Token refreshed successfully',
+      token: accessToken,
+    });
+  } catch (error) {
+    logger.error('Refresh token error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
+const logout = async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const user = await User.findById(decoded.userId);
+
+        if (user) {
+          // Clear refresh token
+          user.refresh_token = undefined;
+          user.refreshToken_createdAt = undefined;
+          await user.save();
+        }
+      } catch (error) {
+        // Token might be expired, but we still want to allow logout
+        logger.debug('Token verification failed during logout:', error.message);
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Logged out successfully',
+    });
+  } catch (error) {
+    logger.error('Logout error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
 export {
   sendLoginOTP,
   verifyLoginOTP,
   sendSignupOTP,
   verifySignupOTP,
   completeProfile,
+  refreshToken,
+  logout,
 };
