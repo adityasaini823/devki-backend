@@ -1,57 +1,61 @@
 import mongoose from "mongoose";
 
 const subscriptionSchema = new mongoose.Schema({
-    id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        unique: true,
-        index: true,
-    },
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
+        index: true,
     },
     subscription_product_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'SubscriptionProduct',
         required: true,
+        index: true,
     },
-    start_date: {
-        type: Date,
+    delivery_time: {
+        type: String,
         required: true,
-    },
-    end_date: {
-        type: Date,
-        required: true,
+        enum: ['morning', 'evening'],
     },
     frequency: {
         type: String,
+        required: true,
+        enum: ['daily', 'weekdays', 'weekly', 'biweekly'],
+    },
+    deliveries_per_month: {
+        type: Number,
+        required: true,
+    },
+    price_per_delivery: {
+        type: Number,
+        required: true,
+    },
+    monthly_estimate: {
+        type: Number,
         required: true,
     },
     status: {
         type: String,
         required: true,
         default: 'active',
+        enum: ['active', 'paused', 'cancelled'],
     },
-    unit_price: {
-        type: Number,
-        required: true,
-    },
-    quantity: {
-        type: Number,
-        required: true,
+    start_date: {
+        type: Date,
+        default: Date.now,
     },
     createdAt: {
         type: Date,
-        required: true,
         default: Date.now,
     },
     updatedAt: {
         type: Date,
-        required: true,
         default: Date.now,
     },
 });
 
-const Subscription = mongoose.model('Subscription', subscriptionSchema);
+subscriptionSchema.index({ user_id: 1, status: 1 });
+subscriptionSchema.index({ subscription_product_id: 1 });
+
+export default mongoose.model('Subscription', subscriptionSchema);

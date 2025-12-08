@@ -69,7 +69,7 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-// Regular indexes (NOT TTL - TTL indexes delete entire documents!)
+
 userSchema.index({ "otp_expiresAt": 1 });
 userSchema.index({ "refreshToken_createdAt": 1 });
 
