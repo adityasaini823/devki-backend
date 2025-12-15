@@ -4,6 +4,7 @@ import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import subscriptionRoutes from './routes/subscriptionRoutes.js';
 import subscriptionProductRoutes from './routes/subscriptionProductRoutes.js';
+import productRoutes from './routes/productRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
 import { connectToMongo } from './config/db.js';
 import morganMiddleware from './middleware/morganMiddleware.js';
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/subscription-products', subscriptionProductRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api/products', productRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
