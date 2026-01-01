@@ -6,6 +6,8 @@ import {
   verifySignupOTP,
   completeProfile,
   refreshToken,
+  updateProfile,
+  getProfile,
   logout,
 } from '../controllers/authController.js';
 import {
@@ -32,6 +34,12 @@ router.post('/complete-profile', validateCompleteProfile, completeProfile);
 
 // Token management
 router.post('/refresh-token', refreshToken);
+
+// Profile management (authenticated)
+router.get('/profile', authenticateToken, getProfile);
+router.patch('/profile', authenticateToken, updateProfile);
+
+// Logout
 router.post('/logout', authenticateToken, logout);
 
 export default router;

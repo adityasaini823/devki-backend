@@ -10,7 +10,7 @@ import { authenticateToken } from '../middleware/auth.js';
 const router = express.Router();
 
 // All subscription routes require authentication
-// router.use(authenticateToken);
+router.use(authenticateToken);
 
 // Create or update subscription
 router.post('/', createOrUpdateSubscription);

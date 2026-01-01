@@ -17,8 +17,7 @@ const getDeliveriesPerMonth = (frequency) => {
 // Create or update subscription
 const createOrUpdateSubscription = async (req, res) => {
   try {
-    // const userId = req.user.userId;
-    const userId = '691ec17b03643ec7d779faf4';
+    const userId = req.user.userId;
     const { subscription_product_id, delivery_time, frequency } = req.body;
 
     // Validate required fields

@@ -5,6 +5,7 @@ import authRoutes from './routes/authRoutes.js';
 import subscriptionRoutes from './routes/subscriptionRoutes.js';
 import subscriptionProductRoutes from './routes/subscriptionProductRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
 import { connectToMongo } from './config/db.js';
 import morganMiddleware from './middleware/morganMiddleware.js';
@@ -31,6 +32,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/subscription-products', subscriptionProductRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;

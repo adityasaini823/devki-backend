@@ -346,6 +346,150 @@ const refreshToken = async (req, res) => {
   }
 };
 
+const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { first_name, last_name, email, address, city, state, pincode } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    // Update fields if provided
+    if (first_name !== undefined) {
+      if (!first_name || first_name.trim().length < 2) {
+        return res.status(400).json({
+          success: false,
+          message: 'First name must be at least 2 characters long',
+        });
+      }
+      user.first_name = first_name.trim();
+    }
+
+    if (last_name !== undefined) {
+      user.last_name = last_name ? last_name.trim() : '';
+    }
+
+    if (email !== undefined) {
+      // Basic email validation
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Please provide a valid email address',
+        });
+      }
+      user.email = email ? email.trim() : '';
+    }
+
+    if (address !== undefined) {
+      if (!address || address.trim().length < 5) {
+        return res.status(400).json({
+          success: false,
+          message: 'Address must be at least 5 characters long',
+        });
+      }
+      user.address = address.trim();
+    }
+
+    if (city !== undefined) {
+      if (!city || city.trim().length < 2) {
+        return res.status(400).json({
+          success: false,
+          message: 'City must be at least 2 characters long',
+        });
+      }
+      user.city = city.trim();
+    }
+
+    if (state !== undefined) {
+      if (!state || state.trim().length < 2) {
+        return res.status(400).json({
+          success: false,
+          message: 'State must be at least 2 characters long',
+        });
+      }
+      user.state = state.trim();
+    }
+
+    if (pincode !== undefined) {
+      if (!pincode || !/^\d{6}$/.test(pincode)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Please provide a valid 6-digit pincode',
+        });
+      }
+      user.pincode = pincode.trim();
+    }
+
+    user.updatedAt = new Date();
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Profile updated successfully',
+      user: {
+        id: user._id,
+        mobile: user.mobile,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        address: user.address,
+        city: user.city,
+        state: user.state,
+        pincode: user.pincode,
+      },
+    });
+  } catch (error) {
+    logger.error('Update profile error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
+const getProfile = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const user = await User.findById(userId).select('-otp -otp_expiresAt -refresh_token -refreshToken_createdAt -__v');
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: user._id,
+        mobile: user.mobile,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        address: user.address,
+        city: user.city,
+        state: user.state,
+        pincode: user.pincode,
+        country: user.country,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    });
+  } catch (error) {
+    logger.error('Get profile error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
 const logout = async (req, res) => {
   try {
     const authHeader = req.headers['authorization'];
@@ -388,5 +532,7 @@ export {
   verifySignupOTP,
   completeProfile,
   refreshToken,
+  updateProfile,
+  getProfile,
   logout,
 };
