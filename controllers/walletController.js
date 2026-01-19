@@ -76,11 +76,11 @@ export const getWalletTransactions = async (req, res) => {
   }
 };
 
-// Add money to wallet (deposit)
+// Add money to wallet (deposit request - stays pending until admin approves)
 export const addMoneyToWallet = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { amount, payment_method, payment_id } = req.body;
+    const { amount, payment_method, payment_id, remarks } = req.body;
 
     // Validation
     if (!amount || amount <= 0) {
@@ -105,46 +105,35 @@ export const addMoneyToWallet = async (req, res) => {
       });
     }
 
-    // Create transaction record
+    // Create transaction record with PENDING status
+    // Money will only be added when admin approves this transaction
     const transaction = new WalletTransaction({
       user_id: userId,
       transaction_type: "deposit",
       amount,
-      status: "pending", // Will be updated when payment is confirmed
+      status: "pending", // Stays pending until admin approves
       payment_method: payment_method || "upi",
       payment_id: payment_id || null,
+      remarks: remarks || null,
     });
 
     await transaction.save();
 
-    // In a real app, you would integrate with a payment gateway here
-    // For now, we'll simulate successful payment and update balance immediately
-    // In production, this should be done via webhook after payment confirmation
-
-    // Simulate payment success (remove this in production)
-    transaction.status = "completed";
-    transaction.processed_at = new Date();
-    await transaction.save();
-
-    // Update user wallet balance
-    user.wallet_balance = (user.wallet_balance || 0) + amount;
-    await user.save();
-
-    logger.info(`User ${userId} added ₹${amount} to wallet`);
+    logger.info(`User ${userId} requested to add ₹${amount} to wallet (pending admin approval)`);
 
     return res.status(200).json({
       success: true,
-      message: "Money added to wallet successfully",
+      message: "Deposit request submitted successfully. It will be credited to your wallet once approved by admin.",
       data: {
         transaction: transaction,
-        new_balance: user.wallet_balance,
+        current_balance: user.wallet_balance || 0,
       },
     });
   } catch (error) {
     logger.error("Error adding money to wallet:", error);
     return res.status(500).json({
       success: false,
-      message: "Failed to add money to wallet",
+      message: "Failed to submit deposit request",
       error: error.message,
     });
   }
