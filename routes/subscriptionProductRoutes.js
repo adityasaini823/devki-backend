@@ -7,6 +7,8 @@ import {
 } from '../controllers/subscriptionProductController.js';
 // Note: Add admin auth middleware later for create/update routes
 
+import { authenticateAdmin } from '../middleware/adminAuth.js';
+
 const router = express.Router();
 
 // Get all active subscription products (public)
@@ -15,10 +17,13 @@ router.get('/', getSubscriptionProducts);
 // Get single subscription product (public)
 router.get('/:id', getSubscriptionProductById);
 
-// Create subscription product (admin - add auth later)
+// Protected admin routes
+router.use(authenticateAdmin);
+
+// Create subscription product
 router.post('/', createSubscriptionProduct);
 
-// Update subscription product (admin - add auth later)
+// Update subscription product
 router.patch('/:id', updateSubscriptionProduct);
 
 export default router;

@@ -16,7 +16,9 @@ import {
   getAllSubscriptionProducts,
   getAllWalletTransactions,
   updateWalletTransactionStatus,
+  uploadImage,
 } from '../controllers/adminController.js';
+import upload from '../middleware/uploadMiddleware.js';
 import { authenticateAdmin } from '../middleware/adminAuth.js';
 
 const router = express.Router();
@@ -55,5 +57,8 @@ router.get('/subscription-products', getAllSubscriptionProducts);
 // Wallet Transactions
 router.get('/wallet-transactions', getAllWalletTransactions);
 router.patch('/wallet-transactions/:id/status', updateWalletTransactionStatus);
+
+// Uploads
+router.post('/upload', upload.single('image'), uploadImage);
 
 export default router;

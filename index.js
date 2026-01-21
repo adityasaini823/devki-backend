@@ -21,13 +21,19 @@ connectToMongo();
 
 // CORS configuration - allow credentials for cookies
 app.use(cors({
-  origin: process.env.ADMIN_PANEL_URL || 'http://localhost:3000',
+  origin: [
+    process.env.ADMIN_PANEL_URL,
+    'http://localhost:3000',
+    'http://localhost:8081'
+  ].filter(Boolean),
   credentials: true,
 }));
 app.use(cookieParser());
 app.use(morganMiddleware);
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
   return res.status(200).json({

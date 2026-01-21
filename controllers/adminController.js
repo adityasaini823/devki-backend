@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import logger from '../logger.js';
+import StorageService from '../services/StorageService.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || JWT_SECRET + '-admin-refresh';
@@ -853,6 +854,37 @@ const updateWalletTransactionStatus = async (req, res) => {
   }
 };
 
+// Upload image
+const uploadImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: 'No image uploaded',
+      });
+    }
+
+    // Extract folder from query or body (query is more reliable for multipart)
+    const folder = req.query.folder || req.body.folder || 'devki_uploads';
+
+    // StorageService handles the abstraction. 
+    // Since we used MemoryStorage, we pass the file buffer.
+    const result = await StorageService.upload(req.file, { folder });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Image uploaded successfully',
+      data: result,
+    });
+  } catch (error) {
+    logger.error('Upload image error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
 export {
   adminLogin,
   refreshAdminToken,
@@ -870,4 +902,5 @@ export {
   getAllSubscriptionProducts,
   getAllWalletTransactions,
   updateWalletTransactionStatus,
+  uploadImage,
 };
