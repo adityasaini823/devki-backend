@@ -113,7 +113,8 @@ export const addMoneyToWallet = async (req, res) => {
       amount,
       status: "pending", // Stays pending until admin approves
       payment_method: payment_method || "upi",
-      payment_id: payment_id || null,
+      payment_id: payment_id || null, // This is the transaction ID/Reference number
+      payment_proof: req.body.payment_proof || null, // Screenshot URL
       remarks: remarks || null,
     });
 

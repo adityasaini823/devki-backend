@@ -767,6 +767,7 @@ const getAllWalletTransactions = async (req, res) => {
         status: txn.status,
         payment_method: txn.payment_method,
         payment_id: txn.payment_id,
+        payment_proof: txn.payment_proof,
         bank_account: txn.bank_account,
         remarks: txn.remarks,
         admin_remarks: txn.admin_remarks,

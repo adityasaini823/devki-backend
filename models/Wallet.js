@@ -32,6 +32,10 @@ const walletTransactionSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  payment_proof: {
+    type: String,
+    required: false,
+  },
   bank_account: {
     account_number: String,
     ifsc_code: String,

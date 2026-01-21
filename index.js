@@ -14,6 +14,9 @@ import errorHandler from './middleware/errorHandler.js';
 import { connectToMongo } from './config/db.js';
 import morganMiddleware from './middleware/morganMiddleware.js';
 import logger from './logger.js';
+import upload from './middleware/uploadMiddleware.js';
+import { authenticateToken } from './middleware/auth.js';
+import { uploadImage } from './controllers/adminController.js';
 
 const app = express();
 
@@ -42,6 +45,9 @@ app.get('/', (req, res) => {
     version: '1.0.0',
   });
 });
+
+// Common upload route for both users (proofs) and admin (products)
+app.post('/api/upload', authenticateToken, upload.single('image'), uploadImage);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/subscription-products', subscriptionProductRoutes);
