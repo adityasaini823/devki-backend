@@ -12,8 +12,8 @@ const subscriptionProductSchema = new mongoose.Schema({
         required: true,
     },
     price_per_unit: {
-        type: Number, // Price per liter
-        required: true,
+        type: Number, // Price per liter (Reference only)
+        required: false,
     },
     price_per_delivery: {
         type: Number, // Calculated price for this quantity

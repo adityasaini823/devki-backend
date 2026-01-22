@@ -1,4 +1,6 @@
 import SubscriptionProduct from '../models/SubscriptionProducts.js';
+import Subscription from '../models/Subscription.js';
+import SubscriptionDelivery from '../models/SubscriptionDelivery.js';
 import logger from '../logger.js';
 
 // Get all active subscription products
@@ -150,6 +152,9 @@ const updateSubscriptionProduct = async (req, res) => {
       });
     }
 
+    const oldPrice = product.price_per_delivery;
+
+    // Update fields
     if (name !== undefined) product.name = name;
     if (price_per_unit !== undefined) product.price_per_unit = price_per_unit;
     if (price_per_delivery !== undefined) product.price_per_delivery = price_per_delivery;
@@ -159,6 +164,51 @@ const updateSubscriptionProduct = async (req, res) => {
     product.updatedAt = new Date();
 
     await product.save();
+
+    // Check for price change and trigger cascade update
+    if (price_per_delivery !== undefined && oldPrice !== price_per_delivery) {
+      logger.info(`Price changed from ${oldPrice} to ${price_per_delivery}. Triggering cascade update for Product ID: ${id}`);
+
+      // 1. Find all Subscriptions using this product
+      const subscriptions = await Subscription.find({ subscription_product_id: id });
+      const subscriptionIds = subscriptions.map(sub => sub._id);
+
+      if (subscriptionIds.length > 0) {
+        // Update Subscription models (price_per_delivery and monthly_estimate)
+        // We need to iterate or use aggregation update because monthly_estimate depends on deliveries_per_month
+
+        // Using bulkWrite for efficiency if needed, but updateMany with aggregation pipeline is cleaner for MongoDB 4.2+
+        await Subscription.updateMany(
+          { _id: { $in: subscriptionIds } },
+          [{
+            $set: {
+              price_per_delivery: price_per_delivery,
+              monthly_estimate: { $multiply: ["$deliveries_per_month", price_per_delivery] },
+              updatedAt: new Date()
+            }
+          }]
+        );
+
+        // 2. Update future/scheduled SubscriptionDeliveries
+        const result = await SubscriptionDelivery.updateMany(
+          {
+            subscription_id: { $in: subscriptionIds },
+            status: 'scheduled',
+            payment_status: 'pending', // Only update unpaid deliveries
+            // Optional: only update if date is tomorrow onwards? 
+            // Usually safe to update 'scheduled' ones as they haven't been delivered.
+          },
+          {
+            $set: {
+              price: price_per_delivery,
+              updatedAt: new Date()
+            }
+          }
+        );
+
+        logger.info(`Cascade update complete. Updated ${subscriptions.length} subscriptions and ${result.modifiedCount} future deliveries.`);
+      }
+    }
 
     return res.status(200).json({
       success: true,
