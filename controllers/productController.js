@@ -5,22 +5,28 @@ import logger from '../logger.js';
 const getProducts = async (req, res) => {
   try {
     const { category, search } = req.query;
-    
+
     let query = { is_active: true };
-    
+
     // Filter by category if provided
     if (category) {
       query.category = category;
     }
-    
+
     // Search by product name if provided
     if (search) {
       query.product_name = { $regex: search, $options: 'i' };
     }
 
-    const products = await Product.find(query)
-      .sort({ createdAt: -1 })
-      .select('-__v');
+    const products = await Product.aggregate([
+      { $match: query },
+      {
+        $addFields: {
+          isInStock: { $gt: ["$product_stock", 0] }
+        }
+      },
+      { $sort: { isInStock: -1, createdAt: -1 } }
+    ]);
 
     // Transform products to include id field
     const transformedProducts = products.map(product => ({
