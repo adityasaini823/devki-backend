@@ -17,7 +17,7 @@ import logger from './logger.js';
 import upload from './middleware/uploadMiddleware.js';
 import { authenticateToken } from './middleware/auth.js';
 import { uploadImage } from './controllers/adminController.js';
-
+import settingsRoutes from './routes/settingsRoutes.js';
 const app = express();
 
 connectToMongo();
@@ -46,6 +46,8 @@ app.get('/', (req, res) => {
   });
 });
 
+
+
 // Common upload route for both users (proofs) and admin (products)
 app.post('/api/upload', authenticateToken, upload.single('image'), uploadImage);
 
@@ -57,6 +59,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/wallet', walletRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/settings', settingsRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
