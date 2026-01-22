@@ -1,6 +1,7 @@
 import Order from '../models/Orders.js';
 import CartItem from '../models/Cart.js';
 import User from '../models/User.js';
+import Product from '../models/Products.js';
 import WalletTransaction from '../models/Wallet.js';
 import logger from '../logger.js';
 
@@ -68,6 +69,23 @@ export const checkout = async (req, res) => {
       total_price: item.total_price,
     }));
 
+    // Check stock availability
+    for (const item of cartItems) {
+      const product = await Product.findById(item.product_id);
+      if (!product) {
+        return res.status(404).json({
+          success: false,
+          message: `Product not found: ${item.product_name}`,
+        });
+      }
+      if (product.product_stock < item.quantity) {
+        return res.status(400).json({
+          success: false,
+          message: `Insufficient stock for ${item.product_name}. Available: ${product.product_stock}`,
+        });
+      }
+    }
+
     // Create wallet transaction for the purchase
     const walletTransaction = new WalletTransaction({
       user_id: userId,
@@ -83,6 +101,14 @@ export const checkout = async (req, res) => {
     // Deduct amount from wallet
     user.wallet_balance = walletBalance - totalAmount;
     await user.save();
+
+    // Deduct stock
+    for (const item of cartItems) {
+      await Product.findByIdAndUpdate(item.product_id, {
+        $inc: { product_stock: -item.quantity },
+        updatedAt: new Date()
+      });
+    }
 
     // Create order
     const order = new Order({

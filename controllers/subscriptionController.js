@@ -30,16 +30,11 @@ const createOrUpdateSubscription = async (req, res) => {
       });
     }
 
-    // Validate enum values
-    const validDeliveryTimes = ['morning', 'evening'];
+    // Validate frequency
     const validFrequencies = ['daily', 'weekdays', 'weekly', 'biweekly'];
 
-    if (!validDeliveryTimes.includes(delivery_time)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid delivery_time. Must be morning or evening',
-      });
-    }
+    // Delivery time is now dynamic, so we just check if it's provided (which it is above)
+    // could optionally check against Settings.delivery.slots but for now String is fine.
 
     if (!validFrequencies.includes(frequency)) {
       return res.status(400).json({

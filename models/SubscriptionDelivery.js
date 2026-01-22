@@ -21,7 +21,6 @@ const subscriptionDeliverySchema = new mongoose.Schema({
     delivery_time: {
         type: String,
         required: true,
-        enum: ['morning', 'evening'],
     },
     product_quantity: {
         type: String,
