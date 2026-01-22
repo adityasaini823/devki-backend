@@ -791,6 +791,106 @@ const getAllWalletTransactions = async (req, res) => {
   }
 };
 
+// Create manual wallet transaction (admin)
+const createWalletTransaction = async (req, res) => {
+  try {
+    const { userId, amount, type, remarks } = req.body;
+
+    // Validation
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'User ID is required',
+      });
+    }
+
+    if (!amount || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Amount must be greater than 0',
+      });
+    }
+
+    if (!type || !['credit', 'debit'].includes(type)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Type must be either "credit" or "debit"',
+      });
+    }
+
+    // Find user
+    const user = await User.findById(userId);
+    if (!user || user.role === 'admin') {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    // Map credit/debit to deposit/withdrawal
+    const transaction_type = type === 'credit' ? 'deposit' : 'withdrawal';
+
+    // Check if debit would result in negative balance
+    if (transaction_type === 'withdrawal') {
+      const currentBalance = user.wallet_balance || 0;
+      if (currentBalance < amount) {
+        return res.status(400).json({
+          success: false,
+          message: `Insufficient balance. Current balance: ₹${currentBalance}`,
+        });
+      }
+    }
+
+    // Update user wallet balance
+    if (transaction_type === 'deposit') {
+      user.wallet_balance = (user.wallet_balance || 0) + amount;
+    } else {
+      user.wallet_balance = Math.max(0, (user.wallet_balance || 0) - amount);
+    }
+    await user.save();
+
+    // Create transaction record with completed status
+    const transaction = new WalletTransaction({
+      user_id: userId,
+      transaction_type,
+      amount,
+      status: 'completed',
+      payment_method: null, // Manual transactions don't have a payment method
+      remarks: remarks || `Manual ${type} by admin`,
+      processed_at: new Date(),
+    });
+
+    await transaction.save();
+
+    logger.info(`Admin created manual ${type} transaction of ₹${amount} for user ${userId}`);
+
+    return res.status(201).json({
+      success: true,
+      message: `Transaction created successfully`,
+      transaction: {
+        id: transaction._id,
+        user: {
+          id: user._id,
+          name: `${user.first_name} ${user.last_name || ''}`.trim(),
+          mobile: user.mobile,
+        },
+        transaction_type: transaction.transaction_type,
+        amount: transaction.amount,
+        status: transaction.status,
+        remarks: transaction.remarks,
+        createdAt: transaction.createdAt,
+      },
+      new_balance: user.wallet_balance,
+    });
+  } catch (error) {
+    logger.error('Create wallet transaction error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
 // Update wallet transaction status
 const updateWalletTransactionStatus = async (req, res) => {
   try {
@@ -902,6 +1002,7 @@ export {
   updateSubscriptionStatus,
   getAllSubscriptionProducts,
   getAllWalletTransactions,
+  createWalletTransaction,
   updateWalletTransactionStatus,
   uploadImage,
 };

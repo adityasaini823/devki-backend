@@ -15,6 +15,7 @@ import {
   updateSubscriptionStatus,
   getAllSubscriptionProducts,
   getAllWalletTransactions,
+  createWalletTransaction,
   updateWalletTransactionStatus,
   uploadImage,
 } from '../controllers/adminController.js';
@@ -56,6 +57,7 @@ router.get('/subscription-products', getAllSubscriptionProducts);
 
 // Wallet Transactions
 router.get('/wallet-transactions', getAllWalletTransactions);
+router.post('/wallet-transactions', createWalletTransaction);
 router.patch('/wallet-transactions/:id/status', updateWalletTransactionStatus);
 
 // Uploads
