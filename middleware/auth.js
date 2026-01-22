@@ -26,5 +26,24 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-export { authenticateToken };
+// Admin check middleware (must be used after authenticateToken)
+const isAdmin = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      message: 'Authentication required',
+    });
+  }
 
+  // Check if user has admin role (check both role field variants)
+  if (req.user.role !== 'admin' && req.user.is_admin !== true) {
+    return res.status(403).json({
+      success: false,
+      message: 'Admin access required',
+    });
+  }
+
+  next();
+};
+
+export { authenticateToken, isAdmin };

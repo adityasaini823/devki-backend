@@ -10,6 +10,7 @@ import cartRoutes from './routes/cartRoutes.js';
 import walletRoutes from './routes/walletRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import subscriptionDeliveryRoutes from './routes/subscriptionDeliveryRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
 import { connectToMongo } from './config/db.js';
 import morganMiddleware from './middleware/morganMiddleware.js';
@@ -60,6 +61,7 @@ app.use('/api/wallet', walletRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/deliveries', subscriptionDeliveryRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
