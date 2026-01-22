@@ -16,6 +16,15 @@ const settingsSchema = new mongoose.Schema({
             default: 100,
         },
     },
+    delivery: {
+        slots: [{
+            id: { type: String, required: true }, // e.g., 'morning'
+            label: { type: String, required: true }, // e.g., 'Morning'
+            startTime: { type: String, required: true }, // e.g., '06:00'
+            endTime: { type: String, required: true }, // e.g., '08:00'
+            isEnabled: { type: Boolean, default: true }
+        }]
+    },
     general: {
         app_name: {
             type: String,

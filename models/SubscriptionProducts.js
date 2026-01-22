@@ -2,10 +2,9 @@ import mongoose from "mongoose";
 
 const subscriptionProductSchema = new mongoose.Schema({
     quantity: {
-        type: String, // '1L', '2L', '3L', '5L'
+        type: String,
         required: true,
         unique: true,
-        enum: ['1L', '2L', '3L', '5L'],
         index: true,
     },
     name: {

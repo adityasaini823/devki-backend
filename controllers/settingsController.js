@@ -22,9 +22,13 @@ export const getSettings = async (req, res) => {
 // Update settings (Admin only)
 export const updateSettings = async (req, res) => {
     try {
-        const { payment, general } = req.body;
+        const { payment, general, delivery } = req.body;
 
         const settings = await Settings.getInstance();
+
+        if (delivery) {
+            settings.delivery = delivery;
+        }
 
         if (payment) {
             if (payment.upi_id) settings.payment.upi_id = payment.upi_id;

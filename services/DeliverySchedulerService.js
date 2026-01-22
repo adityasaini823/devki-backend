@@ -76,7 +76,7 @@ const generateDeliveriesForSubscription = async (subscription, daysAhead = 7) =>
             scheduled_date: targetDate,
             delivery_time: subscription.delivery_time,
             product_quantity: product.quantity,
-            price: subscription.price_per_delivery,
+            price: product.price_per_delivery, // Uses dynamic current price
             status: 'scheduled',
             payment_status: 'pending',
         });

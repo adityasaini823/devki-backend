@@ -4,6 +4,7 @@ import {
   getSubscriptionProductById,
   createSubscriptionProduct,
   updateSubscriptionProduct,
+  deleteSubscriptionProduct,
 } from '../controllers/subscriptionProductController.js';
 // Note: Add admin auth middleware later for create/update routes
 
@@ -25,6 +26,9 @@ router.post('/', createSubscriptionProduct);
 
 // Update subscription product
 router.patch('/:id', updateSubscriptionProduct);
+
+// Delete subscription product
+router.delete('/:id', deleteSubscriptionProduct);
 
 export default router;
 

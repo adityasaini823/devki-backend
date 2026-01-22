@@ -185,10 +185,42 @@ const updateSubscriptionProduct = async (req, res) => {
   }
 };
 
+// Delete subscription product (soft delete)
+const deleteSubscriptionProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await SubscriptionProduct.findById(id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Subscription product not found',
+      });
+    }
+
+    product.is_active = false;
+    product.updatedAt = new Date();
+    await product.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Subscription product deleted successfully',
+    });
+  } catch (error) {
+    logger.error('Delete subscription product error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
 export {
   getSubscriptionProducts,
   getSubscriptionProductById,
   createSubscriptionProduct,
   updateSubscriptionProduct,
+  deleteSubscriptionProduct,
 };
 
