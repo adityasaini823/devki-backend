@@ -1,6 +1,8 @@
 import Subscription from '../models/Subscription.js';
 import SubscriptionProduct from '../models/SubscriptionProducts.js';
 import User from '../models/User.js';
+import SubscriptionDelivery from '../models/SubscriptionDelivery.js';
+import { generateDeliveriesForSubscription } from '../services/DeliverySchedulerService.js';
 import logger from '../logger.js';
 
 // Helper function to calculate deliveries per month based on frequency
@@ -76,6 +78,23 @@ const createOrUpdateSubscription = async (req, res) => {
       subscription.monthly_estimate = monthly_estimate;
       subscription.updatedAt = new Date();
       await subscription.save();
+
+      // Handle Future Deliveries:
+      // 1. Delete future scheduled/skipped deliveries (from tomorrow onwards) to avoid conflicts/stale data
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+
+      await SubscriptionDelivery.deleteMany({
+        subscription_id: subscription._id,
+        status: { $in: ['scheduled', 'skipped'] },
+        scheduled_date: { $gte: tomorrow },
+      });
+
+      // 2. Regenerate deliveries for the next 7 days based on new settings
+      await generateDeliveriesForSubscription(subscription, 7);
+
+      logger.info(`Updated subscription ${subscription._id} and regenerated future deliveries`);
     } else {
       // Create new subscription
       subscription = await Subscription.create({
@@ -89,6 +108,9 @@ const createOrUpdateSubscription = async (req, res) => {
         status: 'active',
         start_date: new Date(),
       });
+
+      // Generate initial deliveries
+      await generateDeliveriesForSubscription(subscription, 7);
     }
 
     // Populate product details for response
@@ -197,6 +219,17 @@ const pauseSubscription = async (req, res) => {
     subscription.updatedAt = new Date();
     await subscription.save();
 
+    // Delete future scheduled/skipped deliveries (from tomorrow onwards)
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+
+    await SubscriptionDelivery.deleteMany({
+      subscription_id: subscription._id,
+      status: { $in: ['scheduled', 'skipped'] },
+      scheduled_date: { $gte: tomorrow },
+    });
+
     return res.status(200).json({
       success: true,
       message: 'Subscription paused successfully',
@@ -234,6 +267,17 @@ const cancelSubscription = async (req, res) => {
     subscription.status = 'cancelled';
     subscription.updatedAt = new Date();
     await subscription.save();
+
+    // Delete future scheduled/skipped deliveries (from tomorrow onwards)
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+
+    await SubscriptionDelivery.deleteMany({
+      subscription_id: subscription._id,
+      status: { $in: ['scheduled', 'skipped'] },
+      scheduled_date: { $gte: tomorrow },
+    });
 
     return res.status(200).json({
       success: true,
