@@ -1,87 +1,95 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    first_name: {
-        type: String,
-        required: true,
-    },
-    last_name: {
-        type: String,
-        required: false,
-    },
-    mobile: {
-        type: String,
-        required: true,
-        unique: true, 
-        index: true
-    },
-    email:{
-      type: String,
-      required: false,
-      index: true
-    },
-    password: {
-      type: String,
-      required: false,
-    },
-    role: {
-      type: String,
-      enum: ['user', 'admin'],
-      default: 'user',
-      index: true,
-    },
-    address:{
-      type: String,
-      required: true,
-    },
-    city:{
-      type: String,
-      required: true,
-    },
-    state:{
-      type: String,
-      required: true,
-    },
-    pincode:{
-      type: String,
-      required: true,
-      index: true
-    },
-    country:{
-      type: String,
-      default: "India",
-      required: true,
-    },
-    otp:{
-      type: String,
-      required: false,
-    },
-    otp_expiresAt:{
-      type: Date,
-      required: false,
-    },
-    refresh_token:{
-      type: String,
-      required: false,
-      index: true
-    },
-    refreshToken_createdAt: {
-      type: Date,
-      required: false,
-    },
-    wallet_balance: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    createdAt:{
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt:{
-      type: Date,
-      default: Date.now,
-    },
+  first_name: {
+    type: String,
+    required: true,
+  },
+  last_name: {
+    type: String,
+    required: false,
+  },
+  mobile: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true
+  },
+  email: {
+    type: String,
+    required: false,
+    index: true
+  },
+  password: {
+    type: String,
+    required: false,
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
+    index: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  state: {
+    type: String,
+    required: true,
+  },
+  pincode: {
+    type: String,
+    required: true,
+    index: true
+  },
+  country: {
+    type: String,
+    default: "India",
+    required: true,
+  },
+  otp: {
+    type: String,
+    required: false,
+  },
+  otp_expiresAt: {
+    type: Date,
+    required: false,
+  },
+  lastOtpSentAt: {
+    type: Date,
+    required: false,
+  },
+  otpAttempts: {
+    type: [Date],
+    default: [],
+  },
+  refresh_token: {
+    type: String,
+    required: false,
+    index: true
+  },
+  refreshToken_createdAt: {
+    type: Date,
+    required: false,
+  },
+  wallet_balance: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 
