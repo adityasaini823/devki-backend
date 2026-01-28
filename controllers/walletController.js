@@ -176,6 +176,21 @@ export const requestWithdrawal = async (req, res) => {
       });
     }
 
+    // Check for existing pending withdrawal request
+    const pendingWithdrawal = await WalletTransaction.findOne({
+      user_id: userId,
+      transaction_type: "withdrawal",
+      status: "pending",
+    });
+
+    if (pendingWithdrawal) {
+      return res.status(400).json({
+        success: false,
+        message: "You already have a pending withdrawal request. Please wait for it to be processed.",
+      });
+    }
+
+    // Check balance
     const currentBalance = user.wallet_balance || 0;
     if (currentBalance < amount) {
       return res.status(400).json({
