@@ -90,8 +90,12 @@ const generateDeliveriesForSubscription = async (subscription, daysAhead = 7) =>
 // Generate deliveries for all active subscriptions
 const generateAllDeliveries = async (daysAhead = 7) => {
     try {
-        logger.info('Starting delivery generation...');
+        logger.info('Starting delivery generation and cleanup...');
 
+        // 1. Mark past leftovers as missed before generating new ones
+        const missedCount = await markOverdueAsMissed();
+
+        // 2. Find active subscriptions to generate for
         const activeSubscriptions = await Subscription.find({ status: 'active' });
         logger.info(`Found ${activeSubscriptions.length} active subscriptions`);
 
@@ -102,12 +106,13 @@ const generateAllDeliveries = async (daysAhead = 7) => {
             totalCreated += created.length;
         }
 
-        logger.info(`Delivery generation complete. Created ${totalCreated} new delivery records.`);
+        logger.info(`Delivery generation complete. Created ${totalCreated} new records, marked ${missedCount} as missed.`);
 
         return {
             success: true,
             subscriptionsProcessed: activeSubscriptions.length,
             deliveriesCreated: totalCreated,
+            missedMarked: missedCount,
         };
     } catch (error) {
         logger.error('Delivery generation error:', error);

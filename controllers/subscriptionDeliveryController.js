@@ -2,7 +2,10 @@ import SubscriptionDelivery from '../models/SubscriptionDelivery.js';
 import Subscription from '../models/Subscription.js';
 import User from '../models/User.js';
 import logger from '../logger.js';
-import { generateAllDeliveries as generateDeliveriesService } from '../services/DeliverySchedulerService.js';
+import { 
+    generateAllDeliveries as generateDeliveriesService,
+    markOverdueAsMissed 
+} from '../services/DeliverySchedulerService.js';
 
 // Get upcoming deliveries for logged-in user
 const getUserDeliveries = async (req, res) => {
@@ -97,6 +100,14 @@ const getDeliveriesByDate = async (req, res) => {
 
         const queryDate = date ? new Date(date) : new Date();
         queryDate.setHours(0, 0, 0, 0);
+
+        // Auto-cleanup missed deliveries if looking at today's or future date
+        const todayAtZero = new Date();
+        todayAtZero.setHours(0, 0, 0, 0);
+        if (queryDate.getTime() >= todayAtZero.getTime()) {
+            await markOverdueAsMissed();
+        }
+
         const nextDay = new Date(queryDate);
         nextDay.setDate(queryDate.getDate() + 1);
 
