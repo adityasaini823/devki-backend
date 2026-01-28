@@ -16,8 +16,8 @@ const getUserDeliveries = async (req, res) => {
         }
 
         const deliveries = await SubscriptionDelivery.find(query)
-            .sort({ scheduled_date: 1 })
-            .limit(parseInt(limit))
+            .sort({ scheduled_date: -1 }) // Newest first
+            .limit(parseInt(limit) || 30) // Show more by default
             .populate('subscription_id', 'delivery_time frequency')
             .select('-__v');
 
@@ -311,10 +311,18 @@ const getMyDeliveryHistory = async (req, res) => {
     try {
         const userId = req.user.userId;
 
-        // Fetch deliveries that are not 'scheduled'
+        const now = new Date();
+        now.setHours(23, 59, 59, 999); // Include everything up to today
+
+        // Fetch deliveries that are either:
+        // 1. Not 'scheduled' (delivered, skipped, missed)
+        // 2. OR are in the past (even if still 'scheduled')
         const deliveries = await SubscriptionDelivery.find({
             user_id: userId,
-            status: { $ne: 'scheduled' }
+            $or: [
+                // { status: { $ne: 'scheduled' } },
+                { scheduled_date: { $lt: now } }
+            ]
         })
             .sort({ scheduled_date: -1 })
             .populate('subscription_id', 'delivery_time frequency')
