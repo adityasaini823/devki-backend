@@ -2,6 +2,7 @@ import express from 'express';
 import { authenticateToken, isAdmin } from '../middleware/auth.js';
 import {
     getUserDeliveries,
+    getMyDeliveryHistory,
     skipDelivery,
     getDeliveriesByDate,
     markDelivered,
@@ -15,6 +16,9 @@ const router = express.Router();
 // ===== USER ROUTES =====
 // Get user's upcoming/past deliveries
 router.get('/my-deliveries', authenticateToken, getUserDeliveries);
+
+// Get user's past delivery history
+router.get('/my-delivery-history', authenticateToken, getMyDeliveryHistory);
 
 // Skip a delivery (user)
 router.patch('/:id/skip', authenticateToken, skipDelivery);

@@ -2,6 +2,7 @@ import express from 'express';
 import {
   createOrUpdateSubscription,
   getSubscription,
+  getSubscriptionHistory,
   pauseSubscription,
   cancelSubscription,
 } from '../controllers/subscriptionController.js';
@@ -17,6 +18,9 @@ router.post('/', createOrUpdateSubscription);
 
 // Get user's subscription
 router.get('/', getSubscription);
+
+// Get user's subscription history
+router.get('/history', getSubscriptionHistory);
 
 // Pause subscription
 router.patch('/pause', pauseSubscription);

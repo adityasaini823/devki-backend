@@ -1,20 +1,17 @@
 import morgan from 'morgan';
-import logger from '../logger.js';
+import Logger from '../logger.js';
 
-// Create a stream object with a 'write' function that Morgan can use
-const morganStream = {
-  write: (message) => {
-    logger.http(message.trim());
-  },
-};
+// Define the userId token for morgan
+morgan.token('userId', (req) => {
+    return req.user?._id || req.user?.id || '-';
+});
 
-const morganMiddleware = morgan(
-  // The 'combined' format is a good detailed preset
-  ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"',
-  { 
-    stream: morganStream,
-    
-  }
-);
+const morganMiddleware = morgan(':method :url :status :res[content-length] - :response-time ms :userId', {
+    stream: {
+        write: async (message) => {
+            Logger.http(`${message.trim()}`);
+        }
+    }
+});
 
 export default morganMiddleware;

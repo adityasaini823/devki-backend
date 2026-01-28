@@ -306,9 +306,37 @@ const generateDeliveries = async (req, res) => {
     }
 };
 
+// Get user's delivery history (past deliveries only)
+const getMyDeliveryHistory = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+
+        // Fetch deliveries that are not 'scheduled'
+        const deliveries = await SubscriptionDelivery.find({
+            user_id: userId,
+            status: { $ne: 'scheduled' }
+        })
+            .sort({ scheduled_date: -1 })
+            .populate('subscription_id', 'delivery_time frequency')
+            .select('-__v');
+
+        return res.status(200).json({
+            success: true,
+            deliveries,
+        });
+    } catch (error) {
+        logger.error('Get delivery history error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
+    }
+};
+
 export {
     getUserDeliveries,
     skipDelivery,
+    getMyDeliveryHistory,
     getDeliveriesByDate,
     markDelivered,
     adminSkipDelivery,

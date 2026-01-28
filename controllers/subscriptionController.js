@@ -291,9 +291,53 @@ const cancelSubscription = async (req, res) => {
   }
 };
 
+// Get user's subscription history (all subscriptions including cancelled/paused)
+const getSubscriptionHistory = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const subscriptions = await Subscription.find({ user_id: userId })
+      .populate('subscription_product_id', 'quantity name price_per_delivery image')
+      .sort({ createdAt: -1 })
+      .select('-__v');
+
+    const formattedSubscriptions = subscriptions.map(sub => ({
+      id: sub._id,
+      subscription_product: {
+        id: sub.subscription_product_id?._id,
+        quantity: sub.subscription_product_id?.quantity,
+        name: sub.subscription_product_id?.name,
+        price_per_delivery: sub.subscription_product_id?.price_per_delivery,
+        image: sub.subscription_product_id?.image,
+      },
+      delivery_time: sub.delivery_time,
+      frequency: sub.frequency,
+      deliveries_per_month: sub.deliveries_per_month,
+      price_per_delivery: sub.price_per_delivery,
+      monthly_estimate: sub.monthly_estimate,
+      status: sub.status,
+      start_date: sub.start_date,
+      createdAt: sub.createdAt,
+      updatedAt: sub.updatedAt,
+    }));
+
+    return res.status(200).json({
+      success: true,
+      subscriptions: formattedSubscriptions,
+    });
+  } catch (error) {
+    logger.error('Get subscription history error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
 export {
   createOrUpdateSubscription,
   getSubscription,
+  getSubscriptionHistory,
   pauseSubscription,
   cancelSubscription,
 };
